@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prasoon Lawania — AI Engineer & Full-Stack Developer</title>
+  <meta name="description" content="Interactive OS-themed portfolio of Prasoon Lawania, CSE student at GEC Bharatpur, specializing in AI, Machine Learning, and Full-Stack Development.">
+  
+  <!-- Preconnect and Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- CSS Styling -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="theme-indigo dark-mode">
+
+  <!-- ==================== BOOT LAUNCH SCREEN ==================== -->
+  <div id="boot-screen" class="boot-screen">
+    <div class="boot-logo">
+      <div class="logo-spinner"></div>
+      <span class="logo-text">PrasoonOS</span>
+    </div>
+    <div class="boot-terminal-log" id="boot-log">
+      <div>[  OK  ] Initializing system kernel...</div>
+      <div>[  OK  ] Loading modules: GEC_Bharatpur_2024_2028.ko...</div>
+      <div>[  OK  ] Setting up environment parameters...</div>
+      <div>[  OK  ] Loading user profile: Prasoon_Lawania...</div>
+      <div>[  OK  ] Launching AI Agents & NLP pipelines...</div>
+      <div>[  OK  ] Mounting virtual file system...</div>
+      <div>[  OK  ] Starting desktop environment...</div>
+    </div>
+    <div class="boot-progress-bar">
+      <div class="boot-progress-fill" id="boot-progress"></div>
+    </div>
+  </div>
+
+  <!-- ==================== DESKTOP CANVAS (DESKTOP) ==================== -->
+  <div id="desktop-canvas" class="desktop-canvas hidden">
+    
+    <!-- Dynamic Aurora Background & Particles -->
+    <div class="aurora-bg"></div>
+    <canvas id="particles-canvas" class="particles-canvas"></canvas>
+
+    <!-- 1. TOP MENU BAR -->
+    <header class="menu-bar">
+      <div class="menu-left">
+        <span class="system-menu-trigger font-outfit" id="system-menu-btn">
+          <span class="menu-digital-clock" id="menu-digital-clock" style="margin-right: 8px; font-family: 'Magneto', 'Courier New', Courier, monospace; font-weight: bold; font-size: 0.95rem; color: var(--accent-light); text-shadow: 0 0 6px rgba(var(--accent-rgb), 0.5); font-variant-numeric: tabular-nums;">00:00:00 AM</span>
+          PrasoonOS
+        </span>
+        <div class="menu-dropdown" id="system-dropdown">
+          <div class="dropdown-item" onclick="openWindow('about')"><i data-lucide="user"></i> About System</div>
+          <hr class="dropdown-divider">
+          <div class="dropdown-item" onclick="toggleThemeDropdown(event)"><i data-lucide="palette"></i> Change Accent Color...</div>
+          <div class="dropdown-item" onclick="openWindow('settings')"><i data-lucide="settings"></i> Preferences</div>
+          <hr class="dropdown-divider">
+          <div class="dropdown-item" onclick="rebootSystem()"><i data-lucide="rotate-ccw"></i> Restart...</div>
+        </div>
+
+        <span class="menu-bar-item" onclick="openWindow('about')">About</span>
+        <span class="menu-bar-item" onclick="openWindow('projects')">Projects</span>
+        <span class="menu-bar-item" onclick="openWindow('skills')">Skills</span>
+        <span class="menu-bar-item" onclick="openWindow('ai')">AI Assistant</span>
+      </div>
+      
+      <div class="menu-right">
+        <!-- Search trigger for Command Palette -->
+        <span class="menu-bar-item-icon" onclick="toggleCommandPalette()" title="Search (Ctrl + K)">
+          <i data-lucide="search"></i>
+          <span class="hotkey-hint">⌘K</span>
+        </span>
+        <span class="menu-bar-item-icon" onclick="openWindow('settings')" title="System Colors"><i data-lucide="palette"></i></span>
+        <span class="menu-bar-item font-outfit text-accent" id="status-status"><i data-lucide="circle-dot" class="status-pulse-dot"></i> Available</span>
+        <span class="menu-bar-item-icon" id="desktop-battery" title="Battery Status" style="display: inline-flex; align-items: center; gap: 4px; cursor: default;">
+          <i data-lucide="battery" id="desktop-battery-icon" style="width: 14px; height: 14px;"></i>
+          <span id="desktop-battery-percent" style="font-size: 0.8rem; font-weight: 600;">--%</span>
+        </span>
+        <span class="menu-bar-item" id="system-clock">00:00 AM</span>
+      </div>
+    </header>
+
+    <!-- Inner Theme Dropdown -->
+    <div class="menu-dropdown theme-dropdown" id="theme-dropdown">
+      <div class="dropdown-item" onclick="setAccentTheme('indigo')"><span class="color-dot indigo"></span> Indigo (Default)</div>
+      <div class="dropdown-item" onclick="setAccentTheme('emerald')"><span class="color-dot emerald"></span> Emerald Green</div>
+      <div class="dropdown-item" onclick="setAccentTheme('crimson')"><span class="color-dot crimson"></span> Crimson Red</div>
+      <div class="dropdown-item" onclick="setAccentTheme('golden')"><span class="color-dot golden"></span> Golden Amber</div>
+    </div>
+
+    <!-- 2. WORKSPACE GRID (Desktop Icons) -->
+    <div class="workspace-grid" id="workspace-grid">
+      <div class="desktop-icon" onclick="openWindow('about')">
+        <div class="icon-wrapper bg-gradient-blue"><i data-lucide="user"></i></div>
+        <span class="icon-label">About Me</span>
+      </div>
+      <div class="desktop-icon" onclick="openWindow('skills')">
+        <div class="icon-wrapper bg-gradient-purple"><i data-lucide="sliders"></i></div>
+        <span class="icon-label">Skills.sys</span>
+      </div>
+      <div class="desktop-icon" onclick="openWindow('projects')">
+        <div class="icon-wrapper bg-gradient-green"><i data-lucide="folder-git-2"></i></div>
+        <span class="icon-label">Projects</span>
+      </div>
+      <div class="desktop-icon" onclick="openWindow('ai')">
+        <div class="icon-wrapper bg-gradient-violet"><i data-lucide="brain-circuit"></i></div>
+        <span class="icon-label">AI_Assistant</span>
+      </div>
+      <div class="desktop-icon" onclick="openWindow('now')">
+        <div class="icon-wrapper bg-gradient-amber"><i data-lucide="clock"></i></div>
+        <span class="icon-label">Now.log</span>
+      </div>
+      <div class="desktop-icon" onclick="openWindow('contact')">
+        <div class="icon-wrapper bg-gradient-cyan"><i data-lucide="mail"></i></div>
+        <span class="icon-label">Contact.url</span>
+      </div>
+      <div class="desktop-icon" onclick="downloadResume()">
+        <div class="icon-wrapper bg-gradient-red"><i data-lucide="file-text"></i></div>
+        <span class="icon-label">Resume.pdf</span>
+      </div>
+    </div>
+
+    <!-- 3. DRAGGABLE WINDOWS CONTAINER -->
+    <div class="window-container" id="window-container">
+
+      <!-- ==================== WINDOW: ABOUT ==================== -->
+      <div class="window glassmorphic closed" id="window-about" style="width: 780px; height: 500px; top: 10%; left: 18%;">
+        <div class="window-header">
+          <div class="window-controls">
+            <span class="control-btn close-btn" onclick="closeWindow('about')"></span>
+            <span class="control-btn minimize-btn" onclick="minimizeWindow('about')"></span>
+            <span class="control-btn maximize-btn" onclick="maximizeWindow('about')"></span>
+          </div>
+          <div class="window-title"><i data-lucide="user"></i> About System</div>
+        </div>
+        <div class="window-body custom-scrollbar">
+          <div class="about-wrapper">
+            <div class="about-sidebar">
+              <div class="profile-frame" style="padding: 0; overflow: hidden; border: 2px solid var(--accent);">
+                <img src="profile.png" alt="Prasoon Lawania" style="width: 100%; height: 100%; object-fit: cover;">
+              </div>
+              <h3 class="font-outfit" style="margin-bottom: 2px;">Prasoon Lawania</h3>
+              <p class="profile-subtitle font-inter">AI Engineer & Full-Stack Developer</p>
+              <div class="profile-meta-list">
+                <div class="meta-item"><i data-lucide="map-pin"></i> Bharatpur, Rajasthan</div>
+                <div class="meta-item"><i data-lucide="graduation-cap"></i> CSE, GEC Bharatpur</div>
+                <div class="meta-item"><i data-lucide="calendar"></i> 2024 – 2028</div>
+                <div class="meta-item"><i data-lucide="award"></i> CGPA: 8.78 / 10.0</div>
+              </div>
+              <div class="profile-cta">
+                <button class="os-btn primary-btn" onclick="openWindow('contact')"><i data-lucide="mail"></i> Message</button>
+                <button class="os-btn secondary-btn" onclick="downloadResume()"><i data-lucide="download"></i> CV</button>
+              </div>
+            </div>
+            <div class="about-main">
+              <h2 class="font-outfit"><span class="gradient-text-accent">Overview</span></h2>
+              <p class="about-text font-inter">
+                I am a Computer Science undergraduate passionate about Artificial Intelligence, Machine Learning, and Full-Stack Development. I enjoy building products that combine elegant user experiences with scalable backend systems. My interests span intelligent automation, modern web technologies, and open-source software, with a focus on solving practical problems through technology.
+              </p>
+              <p class="about-text font-inter" style="margin-top: 10px;">
+                Currently, I am exploring AI agents, LLM orchestration pipelines, and advanced machine learning modeling. My core philosophy is to build with depth, prioritizing authentic functionality and solid software engineering over simple aesthetics.
+              </p>
+              
+              <h3 class="font-outfit text-accent" style="margin-top: 25px;"><i data-lucide="check-circle-2"></i> Achievements & Highlights</h3>
+              <ul class="highlights-list font-inter">
+                <li><i data-lucide="star"></i> Developed **Praxa AI**, a production-ready AI helper dashboard.</li>
+                <li><i data-lucide="star"></i> Built **InvenKart**, a hyperlocal inventory tracker with geolocation discovery.</li>
+                <li><i data-lucide="star"></i> Created an analytics solution for **BAL-SAT Hackathon** Aadhaar enrollment.</li>
+                <li><i data-lucide="star"></i> Active contributor to local web development and open-source communities.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== WINDOW: PROJECTS ==================== -->
+      <div class="window glassmorphic closed" id="window-projects" style="width: 820px; height: 530px; top: 12%; left: 22%;">
+        <div class="window-header">
+          <div class="window-controls">
+            <span class="control-btn close-btn" onclick="closeWindow('projects')"></span>
+            <span class="control-btn minimize-btn" onclick="minimizeWindow('projects')"></span>
+            <span class="control-btn maximize-btn" onclick="maximizeWindow('projects')"></span>
+          </div>
+          <div class="window-title"><i data-lucide="folder-git-2"></i> Projects Explorer</div>
+        </div>
+        <div class="window-body custom-scrollbar">
+          <div class="projects-container">
+            <div class="projects-filter-bar">
+              <button class="filter-tab active" onclick="filterProjects('all', this)">All</button>
+              <button class="filter-tab" onclick="filterProjects('ai', this)">AI / ML</button>
+              <button class="filter-tab" onclick="filterProjects('fullstack', this)">Full-Stack</button>
+              <button class="filter-tab" onclick="filterProjects('others', this)">Design & Others</button>
+            </div>
+            
+            <div class="projects-grid" id="projects-grid-container">
+              <!-- Projects injected dynamically by script.js -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== WINDOW: SKILLS ==================== -->
+      <div class="window glassmorphic closed" id="window-skills" style="width: 800px; height: 510px; top: 8%; left: 20%;">
+        <div class="window-header">
+          <div class="window-controls">
+            <span class="control-btn close-btn" onclick="closeWindow('skills')"></span>
+            <span class="control-btn minimize-btn" onclick="minimizeWindow('skills')"></span>
+            <span class="control-btn maximize-btn" onclick="maximizeWindow('skills')"></span>
+          </div>
+          <div class="window-title"><i data-lucide="sliders"></i> Skills Analyzer</div>
+        </div>
+        <div class="window-body custom-scrollbar">
+          <div class="skills-wrapper font-inter">
+            <h2 class="font-outfit text-center" style="margin-bottom: 20px;">Technical Stack</h2>
+            
+            <div class="skills-sections-container">
+              <div class="skill-group-card">
+                <h3><i data-lucide="code"></i> Languages</h3>
+                <div class="skill-chips-wrapper">
+                  <span class="skill-tag"><span class="tag-glow green"></span>Python</span>
+                  <span class="skill-tag"><span class="tag-glow blue"></span>JavaScript</span>
+                  <span class="skill-tag"><span class="tag-glow cyan"></span>TypeScript</span>
+                  <span class="skill-tag"><span class="tag-glow purple"></span>C++</span>
+                  <span class="skill-tag"><span class="tag-glow red"></span>SQL</span>
+                  <span class="skill-tag"><span class="tag-glow orange"></span>HTML5 / CSS3</span>
+                </div>
+              </div>
+
+              <div class="skill-group-card">
+                <h3><i data-lucide="layout"></i> Frontend</h3>
+                <div class="skill-chips-wrapper">
+                  <span class="skill-tag"><span class="tag-glow blue"></span>React</span>
+                  <span class="skill-tag"><span class="tag-glow dark"></span>Next.js</span>
+                  <span class="skill-tag"><span class="tag-glow cyan"></span>Tailwind CSS</span>
+                  <span class="skill-tag"><span class="tag-glow violet"></span>Framer Motion</span>
+                  <span class="skill-tag"><span class="tag-glow green"></span>GSAP</span>
+                </div>
+              </div>
+
+              <div class="skill-group-card">
+                <h3><i data-lucide="server"></i> Backend & DBs</h3>
+                <div class="skill-chips-wrapper">
+                  <span class="skill-tag"><span class="tag-glow green"></span>Node.js</span>
+                  <span class="skill-tag"><span class="tag-glow blue"></span>Express.js</span>
+                  <span class="skill-tag"><span class="tag-glow cyan"></span>FastAPI</span>
+                  <span class="skill-tag"><span class="tag-glow green"></span>MongoDB</span>
+                  <span class="skill-tag"><span class="tag-glow blue"></span>MySQL</span>
+                  <span class="skill-tag"><span class="tag-glow sky"></span>PostgreSQL</span>
+                  <span class="skill-tag"><span class="tag-glow orange"></span>Firebase</span>
+                </div>
+              </div>
+
+              <div class="skill-group-card">
+                <h3><i data-lucide="cpu"></i> Artificial Intelligence</h3>
+                <div class="skill-chips-wrapper">
+                  <span class="skill-tag"><span class="tag-glow orange"></span>TensorFlow</span>
+                  <span class="skill-tag"><span class="tag-glow red"></span>PyTorch</span>
+                  <span class="skill-tag"><span class="tag-glow green"></span>Scikit-learn</span>
+                  <span class="skill-tag"><span class="tag-glow blue"></span>OpenCV</span>
+                  <span class="skill-tag"><span class="tag-glow yellow"></span>Hugging Face</span>
+                  <span class="skill-tag"><span class="tag-glow purple"></span>LangChain</span>
+                </div>
+              </div>
+
+              <div class="skill-group-card">
+                <h3><i data-lucide="terminal"></i> DevOps & Design</h3>
+                <div class="skill-chips-wrapper">
+                  <span class="skill-tag"><span class="tag-glow red"></span>Git / GitHub</span>
+                  <span class="skill-tag"><span class="tag-glow blue"></span>Docker</span>
+                  <span class="skill-tag"><span class="tag-glow dark"></span>Linux</span>
+                  <span class="skill-tag"><span class="tag-glow dark"></span>Vercel / Netlify</span>
+                  <span class="skill-tag"><span class="tag-glow violet"></span>Figma</span>
+                  <span class="skill-tag"><span class="tag-glow red"></span>Canva</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Certifications subsection -->
+            <h3 class="font-outfit text-accent" style="margin-top: 30px; border-top: 1px solid var(--border-color); padding-top: 20px;"><i data-lucide="award"></i> Certifications</h3>
+            <div class="certifications-grid">
+              <div class="cert-item"><i data-lucide="shield-check"></i> Python Programming</div>
+              <div class="cert-item"><i data-lucide="shield-check"></i> Machine Learning Core</div>
+              <div class="cert-item"><i data-lucide="shield-check"></i> SQL Databases</div>
+              <div class="cert-item"><i data-lucide="shield-check"></i> Git & GitHub Essentials</div>
+              <div class="cert-item"><i data-lucide="shield-check"></i> JavaScript Algorithms</div>
+              <div class="cert-item"><i data-lucide="shield-check"></i> React Development</div>
+              <div class="cert-item"><i data-lucide="shield-check"></i> TensorFlow & Deep Learning</div>
+              <div class="cert-item"><i data-lucide="shield-check"></i> Docker Containers</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <!-- ==================== WINDOW: AI ASSISTANT ==================== -->
+      <div class="window glassmorphic closed" id="window-ai" style="width: 700px; height: 480px; top: 9%; left: 21%;">
+        <div class="window-header">
+          <div class="window-controls">
+            <span class="control-btn close-btn" onclick="closeWindow('ai')"></span>
+            <span class="control-btn minimize-btn" onclick="minimizeWindow('ai')"></span>
+            <span class="control-btn maximize-btn" onclick="maximizeWindow('ai')"></span>
+          </div>
+          <div class="window-title"><i data-lucide="brain-circuit"></i> OS AI Agent</div>
+        </div>
+        <div class="window-body ai-body">
+          <div class="ai-chat-history custom-scrollbar" id="ai-chat-history">
+            <div class="ai-msg bot">
+              <span class="ai-avatar">AI</span>
+              <div class="msg-bubble font-inter">
+                Hi, I'm Prasoon's AI Assistant. Ask me anything about his skills, projects, education, or career goals!
+              </div>
+            </div>
+          </div>
+          <div class="ai-input-row font-inter">
+            <input type="text" id="ai-chat-input" placeholder="Ask a question about Prasoon..." autocomplete="off">
+            <button id="ai-send-btn" class="os-btn primary-btn"><i data-lucide="send"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== WINDOW: NOW (CURRENT STATUS) ==================== -->
+      <div class="window glassmorphic closed" id="window-now" style="width: 600px; height: 420px; top: 14%; left: 26%;">
+        <div class="window-header">
+          <div class="window-controls">
+            <span class="control-btn close-btn" onclick="closeWindow('now')"></span>
+            <span class="control-btn minimize-btn" onclick="minimizeWindow('now')"></span>
+            <span class="control-btn maximize-btn" onclick="maximizeWindow('now')"></span>
+          </div>
+          <div class="window-title"><i data-lucide="clock"></i> Now.log</div>
+        </div>
+        <div class="window-body custom-scrollbar">
+          <div class="now-content font-inter">
+            <h2 class="font-outfit text-accent text-center" style="margin-bottom: 15px;">What I'm Doing "Now"</h2>
+            <div class="now-card">
+              <div class="now-section">
+                <h4><i data-lucide="book-open"></i> Education Focus</h4>
+                <p>Currently deep in my 4th Semester (B.Tech Computer Science) at GEC Bharatpur, focusing on Database Systems, Machine Learning algorithms, and Computer Architecture.</p>
+              </div>
+              <div class="now-section">
+                <h4><i data-lucide="activity"></i> Current Project Work</h4>
+                <p>Improving **Praxa AI**'s agent integration, optimizing RAG pipeline performance, and designing low-latency serverless backend endpoints.</p>
+              </div>
+              <div class="now-section">
+                <h4><i data-lucide="flame"></i> Currently Learning</h4>
+                <p>Reading research papers on Agentic AI frameworks (Autogen, CrewAI), learning advanced Docker container configurations, and practicing system designs for high concurrency.</p>
+              </div>
+            </div>
+            <p class="now-footer text-muted text-center" style="margin-top: 15px; font-size: 0.85rem;">Last Updated: July 2026</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== WINDOW: CONTACT ==================== -->
+      <div class="window glassmorphic closed" id="window-contact" style="width: 720px; height: 470px; top: 11%; left: 23%;">
+        <div class="window-header">
+          <div class="window-controls">
+            <span class="control-btn close-btn" onclick="closeWindow('contact')"></span>
+            <span class="control-btn minimize-btn" onclick="minimizeWindow('contact')"></span>
+            <span class="control-btn maximize-btn" onclick="maximizeWindow('contact')"></span>
+          </div>
+          <div class="window-title"><i data-lucide="mail"></i> Contact.url</div>
+        </div>
+        <div class="window-body custom-scrollbar">
+          <div class="contact-wrapper">
+            <div class="contact-sidebar">
+              <h3 class="font-outfit text-accent font-inter">Let's Connect!</h3>
+              <p class="contact-sidebar-desc font-inter">Feel free to drop a message or reach out via email for internships, project collaborations, or just a chat about technology!</p>
+              
+              <div class="contact-links-grid font-inter">
+                <a href="mailto:plawania05@gmail.com" class="contact-link-item">
+                  <i data-lucide="mail"></i>
+                  <span>plawania05@gmail.com</span>
+                </a>
+                <a href="mailto:prasoonlawania@ecbharatpur.ac.in" class="contact-link-item" style="font-size: 0.82rem;">
+                  <i data-lucide="mail"></i>
+                  <span>prasoonlawania@ecbharatpur.ac.in</span>
+                </a>
+                <a href="https://github.com/prasoonlawania" target="_blank" rel="noopener" class="contact-link-item">
+                  <i data-lucide="github"></i>
+                  <span>github.com/prasoonlawania</span>
+                </a>
+                <a href="https://www.linkedin.com/in/prasoon-lawania/" target="_blank" rel="noopener" class="contact-link-item">
+                  <i data-lucide="linkedin"></i>
+                  <span>linkedin.com/in/prasoon-lawania</span>
+                </a>
+              </div>
+            </div>
+            
+            <div class="contact-main font-inter" style="padding: 0; overflow: hidden; height: 100%;">
+              <iframe id="contact-google-form" data-src="https://docs.google.com/forms/d/e/1FAIpQLSetN9lOjMV5Wb0u5iry90JbvUeeWBEDEMszsVcD289JXoqWAg/viewform?embedded=true" src="about:blank" width="100%" height="100%" frameborder="0" marginheight="0" marginwidth="0" style="border: none; border-radius: var(--border-radius-sm); min-height: 380px; background: #ffffff;">Loading…</iframe>
+            </div>        <div class="contact-success hidden" id="contact-success-msg">
+                <div class="success-icon"><i data-lucide="check-circle"></i></div>
+                <h4>Message Sent Successfully!</h4>
+                <p>Thank you for reaching out. I'll get back to you shortly.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==================== WINDOW: RESUME ==================== -->
+      <div class="window glassmorphic closed" id="window-resume" style="width: 820px; height: 560px; top: 7%; left: 19%;">
+        <div class="window-header">
+          <div class="window-controls">
+            <span class="control-btn close-btn" onclick="closeWindow('resume')"></span>
+            <span class="control-btn minimize-btn" onclick="minimizeWindow('resume')"></span>
+            <span class="control-btn maximize-btn" onclick="maximizeWindow('resume')"></span>
+          </div>
+          <div class="window-title"><i data-lucide="file-text"></i> Resume Viewer - Prasoon_Resume.pdf</div>
+        </div>
+        <div class="window-body custom-scrollbar" style="background: rgba(15, 15, 20, 0.55);">
+          
+          <!-- Document Viewer Toolbar -->
+          <div class="resume-viewer-toolbar">
+            <div class="toolbar-left">
+              <button class="os-btn secondary-btn" onclick="toggleResumeTheme()"><i data-lucide="eye"></i> Toggle Paper Theme</button>
+            </div>
+            <div class="toolbar-right">
+              <button class="os-btn secondary-btn" onclick="printResume()"><i data-lucide="printer"></i> Print Resume</button>
+              <button class="os-btn primary-btn" onclick="downloadResume()"><i data-lucide="download"></i> Download PDF</button>
+            </div>
+          </div>
+
+          <!-- Printable Resume Sheet -->
+          <div class="resume-paper" id="resume-paper-doc">
+            <!-- Header -->
+            <div class="resume-doc-header text-center">
+              <h1 class="font-outfit text-uppercase">Prasoon Lawania</h1>
+              <p class="resume-doc-contact font-inter">
+                Bharatpur, Rajasthan, India &nbsp;|&nbsp; 
+                <a href="mailto:plawania05@gmail.com">plawania05@gmail.com</a> &nbsp;|&nbsp; 
+                +91 86194 94374
+              </p>
+              <p class="resume-doc-links font-inter">
+                <a href="https://linkedin.com/in/prasoon-lawania" target="_blank" rel="noopener">linkedin.com/in/prasoon-lawania</a> &nbsp;|&nbsp; 
+                <a href="https://github.com/Prasoonlawania" target="_blank" rel="noopener">github.com/Prasoonlawania</a>
+              </p>
+            </div>
+            
+            <hr class="resume-doc-hr">
+            
+            <!-- Summary -->
+            <div class="resume-doc-section">
+              <h3 class="resume-doc-title font-outfit text-uppercase">Professional Summary</h3>
+              <p class="resume-doc-body font-inter">
+                Driven and multi-dimensional Computer Science and Engineering undergraduate bridging tech innovation with real world human needs. Combines technical capability across Artificial Intelligence, Machine Learning, and Full-Stack Development with a founder's mindset. Currently contributing to impactful AI workflows as an Intern at <strong>Vicharanashala Lab (IIT Ropar)</strong>. Proven track record of execution through founding InvenKart and engineering crowdsourced ecosystem platforms, layered with an intrinsic passion for creative content generation and analytical problem-solving.
+              </p>
+            </div>
+
+            <!-- Education -->
+            <div class="resume-doc-section">
+              <h3 class="resume-doc-title font-outfit text-uppercase">Education</h3>
+              <div class="resume-doc-item font-inter">
+                <div class="item-header">
+                  <strong>Engineering College Bharatpur</strong>
+                  <span class="item-date">2024 – 2028</span>
+                </div>
+                <div class="item-subtitle">
+                  <em>Bachelor of Technology (B.Tech), Computer Science & Engineering</em>
+                  <strong class="item-score">CGPA: 8.78</strong>
+                </div>
+              </div>
+              <div class="resume-doc-item font-inter">
+                <div class="item-header">
+                  <strong>Antariksha Academy Senior Secondary School</strong>
+                  <span class="item-date">2023</span>
+                </div>
+                <div class="item-subtitle">
+                  <em>Class XII (RBSE)</em>
+                  <strong class="item-score">Percentage: 78.6%</strong>
+                </div>
+              </div>
+              <div class="resume-doc-item font-inter">
+                <div class="item-header">
+                  <strong>Holy Mother Public Secondary School</strong>
+                  <span class="item-date">2021</span>
+                </div>
+                <div class="item-subtitle">
+                  <em>Class X (RBSE)</em>
+                  <strong class="item-score">Percentage: 93.0%</strong>
+                </div>
+              </div>
+            </div>
+
+            <!-- Experience -->
+            <div class="resume-doc-section">
+              <h3 class="resume-doc-title font-outfit text-uppercase">Experience</h3>
+              <div class="resume-doc-item font-inter">
+                <div class="item-header">
+                  <strong>AI, Machine Learning & Open-Source Development Intern</strong>
+                  <span class="item-date">May 2026 – Present</span>
+                </div>
+                <div class="item-subtitle">
+                  <em>Vicharanashala Lab, IIT Ropar</em>
+                </div>
+                <ul class="resume-doc-bullets">
+                  <li>Architecting real-world AI and Machine Learning models focused on direct educational and community impact frameworks.</li>
+                  <li>Leveraging Python, SQL, and Deep Learning to optimize automated workflows.</li>
+                  <li>Exploring Large Language Models (LLMs) to build context-aware, practical software bridges.</li>
+                  <li>Developing backend elements and model inferences utilizing TensorFlow and PyTorch.</li>
+                  <li>Actively contributing to open-source codebases, fostering collaborative technology growth.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Featured Projects -->
+            <div class="resume-doc-section">
+              <h3 class="resume-doc-title font-outfit text-uppercase">Featured Projects</h3>
+              <div class="resume-doc-item font-inter">
+                <div class="item-header">
+                  <strong>AI-Driven Farmer Query Intelligence System</strong>
+                  <a href="https://github.com/Prasoonlawania" target="_blank" rel="noopener" class="item-link">View Project</a>
+                </div>
+                <div class="item-tech">
+                  <strong>Tech Stack:</strong> Python, Scikit-learn, NLTK, Pandas, TF-IDF, Machine Learning, NLP, Google Colab
+                </div>
+                <ul class="resume-doc-bullets">
+                  <li>Designed a smart agricultural engine analyzing multi-category farmer queries (weather, pests, market distribution).</li>
+                  <li>Engineered full NLP text preprocessing workflows combined with Multinomial Naive Bayes classification.</li>
+                  <li>Built a cosine similarity retrieval engine to dynamically match historical localized farm recommendations.</li>
+                </ul>
+              </div>
+              <div class="resume-doc-item font-inter">
+                <div class="item-header">
+                  <strong>CSFAQ (Crowd-Sourced FAQ Platform)</strong>
+                  <span class="item-subtitle-meta">VINS Connect (Team CS49)</span>
+                </div>
+                <div class="item-tech">
+                  <strong>Tech Stack:</strong> React, TypeScript, Node.js, Express.js, Firebase Firestore, JWT, Tailwind CSS
+                </div>
+                <ul class="resume-doc-bullets">
+                  <li>Co-created a centralized peer-to-peer student response system for the Vicharanashala internship grid.</li>
+                  <li>Implemented secure authentication and precise Role-Based Access Control (RBAC) matrices.</li>
+                  <li>Streamlined knowledge management by scaling crowd-voted answers into permanent institutional wikis.</li>
+                </ul>
+              </div>
+              <div class="resume-doc-item font-inter">
+                <div class="item-header">
+                  <strong>InvenKart</strong>
+                  <span class="item-subtitle-meta">Founder & CEO</span>
+                </div>
+                <div class="item-tech">
+                  <strong>Focus:</strong> Product Roadmapping, Hyperlocal Market Validation, Operations, Architecture Strategy
+                </div>
+                <ul class="resume-doc-bullets">
+                  <li>Envisioned and spearheaded a localized inventory hub connecting community buyers directly with neighborhood shops.</li>
+                  <li>Meticulously strategized the business model canvas, documentation milestones, and brand messaging loops.</li>
+                  <li>Iterated features directly via user-feedback loops to maximize regional product-market fit.</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Technical Skills -->
+            <div class="resume-doc-section">
+              <h3 class="resume-doc-title font-outfit text-uppercase">Technical Skills</h3>
+              <div class="resume-skills-grid font-inter">
+                <div class="skills-grid-row">
+                  <div class="skills-grid-label"><strong>Languages:</strong></div>
+                  <div class="skills-grid-val">Python, C++, Java, C, SQL</div>
+                </div>
+                <div class="skills-grid-row">
+                  <div class="skills-grid-label"><strong>AI/ML & Data:</strong></div>
+                  <div class="skills-grid-val">Machine Learning, Deep Learning, NLP, LLMs, TensorFlow, PyTorch, Power BI</div>
+                </div>
+                <div class="skills-grid-row">
+                  <div class="skills-grid-label"><strong>Web Stack:</strong></div>
+                  <div class="skills-grid-val">React.js, Node.js, Express.js, TypeScript, MongoDB, Firebase Firestore, Tailwind CSS</div>
+                </div>
+                <div class="skills-grid-row">
+                  <div class="skills-grid-label"><strong>Core Concepts:</strong></div>
+                  <div class="skills-grid-val">Data Structures & Algorithms (DSA), Object-Oriented Programming (OOPs), DBMS</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Creative Pursuits & Leadership -->
+            <div class="resume-doc-section">
+              <h3 class="resume-doc-title font-outfit text-uppercase">Creative Pursuits & Leadership</h3>
+              <ul class="resume-doc-bullets font-inter">
+                <li><strong>Visual Storytelling:</strong> Produce original digital media and self-portrait photography narratives using structured environmental compositions.</li>
+                <li><strong>Creative Writing:</strong> Author contemporary Hindi poetry and Shayari focused on themes of resilience and community.</li>
+                <li><strong>Digital Trust Management:</strong> Coordinate web operations and digital media presence for the <em>Shree Murari Lal Dulari Devi Charitable Trust</em>.</li>
+                <li><strong>Head Organizer:</strong> College Freshers' Party 2025 (Chaired organizational logistics & layout dynamics).</li>
+                <li><strong>Volunteer Engagement:</strong> Active contributor to the National Service Scheme (NSS) and Unnat Bharat Abhiyan.</li>
+              </ul>
+            </div>
+
+            <!-- Certifications -->
+            <div class="resume-doc-section" style="margin-bottom: 0;">
+              <h3 class="resume-doc-title font-outfit text-uppercase">Certifications</h3>
+              <ul class="resume-doc-bullets font-inter" style="margin-bottom: 0;">
+                <li>Google – Intro to AI & Maximize Productivity with AI Tools | NVIDIA – Fundamentals of Deep Learning</li>
+                <li>Job Simulations: JPMorgan Chase (Software Eng.) | Deloitte Australia (Data Analytics) | Tata (Cybersecurity)</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ==================== WINDOW: SETTINGS (ACCENT COLORS) ==================== -->
+      <div class="window glassmorphic closed" id="window-settings" style="width: 580px; height: 380px; top: 16%; left: 25%;">
+        <div class="window-header">
+          <div class="window-controls">
+            <span class="control-btn close-btn" onclick="closeWindow('settings')"></span>
+            <span class="control-btn minimize-btn" onclick="minimizeWindow('settings')"></span>
+            <span class="control-btn maximize-btn" onclick="maximizeWindow('settings')"></span>
+          </div>
+          <div class="window-title"><i data-lucide="palette"></i> Settings & Themes</div>
+        </div>
+        <div class="window-body custom-scrollbar">
+          <div class="settings-content font-inter">
+            <h3 class="font-outfit text-center" style="margin-bottom: 20px;">System Preferences</h3>
+            <div class="settings-group">
+              <label class="settings-label"><i data-lucide="palette"></i> Accent Theme Color</label>
+              <div class="color-options-grid">
+                <div class="color-option-btn active" id="btn-theme-indigo" onclick="setAccentTheme('indigo')">
+                  <span class="color-swatch bg-indigo"></span>
+                  <span>Neon Indigo</span>
+                </div>
+                <div class="color-option-btn" id="btn-theme-emerald" onclick="setAccentTheme('emerald')">
+                  <span class="color-swatch bg-emerald"></span>
+                  <span>Emerald Green</span>
+                </div>
+                <div class="color-option-btn" id="btn-theme-crimson" onclick="setAccentTheme('crimson')">
+                  <span class="color-swatch bg-crimson"></span>
+                  <span>Crimson Red</span>
+                </div>
+                <div class="color-option-btn" id="btn-theme-golden" onclick="setAccentTheme('golden')">
+                  <span class="color-swatch bg-golden"></span>
+                  <span>Golden Amber</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-group" style="margin-top: 30px;">
+              <label class="settings-label"><i data-lucide="info"></i> About System Info</label>
+              <table class="settings-info-table">
+                <tr>
+                  <td>OS Name:</td>
+                  <td>PrasoonOS v1.0.0</td>
+                </tr>
+                <tr>
+                  <td>Processor:</td>
+                  <td>AI-Accelerated Virtual Engine</td>
+                </tr>
+                <tr>
+                  <td>Host Memory:</td>
+                  <td>8.00 GB (GEC_Bharatpur virtual sandbox)</td>
+                </tr>
+                <tr>
+                  <td>Development Stack:</td>
+                  <td>Vanilla JS / HTML5 / CSS3</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 4. BOTTOM DOCK -->
+    <nav class="dock-wrapper">
+      <div class="dock" id="dock">
+        <div class="dock-item" onclick="openWindow('about')" data-title="About Me"><i data-lucide="user"></i></div>
+        <div class="dock-item" onclick="openWindow('skills')" data-title="Technical Skills"><i data-lucide="sliders"></i></div>
+        <div class="dock-item" onclick="openWindow('projects')" data-title="Featured Projects"><i data-lucide="folder-git-2"></i></div>
+        <div class="dock-item" onclick="openWindow('ai')" data-title="AI Assistant Chat"><i data-lucide="brain-circuit"></i></div>
+        <div class="dock-item" onclick="openWindow('now')" data-title="What I'm Doing Now"><i data-lucide="clock"></i></div>
+        <div class="dock-item" onclick="openWindow('contact')" data-title="Contact Prasoon"><i data-lucide="mail"></i></div>
+        <div class="dock-divider"></div>
+        <div class="dock-item" onclick="openWindow('resume')" data-title="Resume / CV Viewer"><i data-lucide="file-text" class="text-accent"></i></div>
+      </div>
+    </nav>
+
+  </div>
+
+  <!-- ==================== MOBILE SYSTEM CANVAS (iOS/Android UI) ==================== -->
+  <div id="mobile-canvas" class="mobile-canvas hidden">
+    <!-- Dynamic Background Aurora -->
+    <div class="aurora-bg"></div>
+    
+    <!-- Mobile Header Status Bar -->
+    <div class="mobile-status-bar">
+      <div class="mobile-time" id="mobile-digital-clock" style="font-family: 'Magneto', 'Courier New', Courier, monospace; font-weight: bold; font-variant-numeric: tabular-nums; font-size: 0.88rem;">10:09:00</div>
+      <div class="mobile-icons" style="display: flex; align-items: center; gap: 4px;">
+        <i data-lucide="wifi"></i>
+        <i data-lucide="battery" id="mobile-battery-icon"></i>
+        <span id="mobile-battery-percent" style="font-size: 0.75rem; font-weight: bold; margin-left: 2px;">--%</span>
+      </div>
+    </div>
+
+    <!-- Main Mobile Home Screen -->
+    <div class="mobile-home-screen">
+      <!-- Search Input resembling spotlight -->
+      <div class="mobile-search-trigger" onclick="toggleCommandPalette()">
+        <i data-lucide="search"></i> Search Apps...
+      </div>
+
+      <div class="mobile-grid">
+        <div class="mobile-app" onclick="openMobileApp('about')">
+          <div class="app-icon bg-gradient-blue"><i data-lucide="user"></i></div>
+          <span class="app-name font-inter">About Me</span>
+        </div>
+        <div class="mobile-app" onclick="openMobileApp('skills')">
+          <div class="app-icon bg-gradient-purple"><i data-lucide="sliders"></i></div>
+          <span class="app-name font-inter">Skills.sys</span>
+        </div>
+        <div class="mobile-app" onclick="openMobileApp('projects')">
+          <div class="app-icon bg-gradient-green"><i data-lucide="folder-git-2"></i></div>
+          <span class="app-name font-inter">Projects</span>
+        </div>
+        <div class="mobile-app" onclick="openMobileApp('ai')">
+          <div class="app-icon bg-gradient-violet"><i data-lucide="brain-circuit"></i></div>
+          <span class="app-name font-inter">AI Agent</span>
+        </div>
+        <div class="mobile-app" onclick="openMobileApp('now')">
+          <div class="app-icon bg-gradient-amber"><i data-lucide="clock"></i></div>
+          <span class="app-name font-inter">Now.log</span>
+        </div>
+        <div class="mobile-app" onclick="openMobileApp('contact')">
+          <div class="app-icon bg-gradient-cyan"><i data-lucide="mail"></i></div>
+          <span class="app-name font-inter">Contact</span>
+        </div>
+        <div class="mobile-app" onclick="openMobileApp('resume')">
+          <div class="app-icon bg-gradient-red"><i data-lucide="file-text"></i></div>
+          <span class="app-name font-inter">Resume</span>
+        </div>
+      </div>
+
+      <!-- Mobile Dock -->
+      <div class="mobile-dock">
+        <div class="mobile-app-dock-item" onclick="openMobileApp('about')"><i data-lucide="user"></i></div>
+        <div class="mobile-app-dock-item" onclick="openMobileApp('projects')"><i data-lucide="folder-git-2"></i></div>
+        <div class="mobile-app-dock-item" onclick="openMobileApp('contact')"><i data-lucide="mail"></i></div>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Sheets for Content -->
+    <div id="mobile-sheet-overlay" class="mobile-sheet-overlay hidden" onclick="closeActiveMobileSheet()"></div>
+    <div id="mobile-sheet" class="mobile-sheet hidden font-inter">
+      <div class="sheet-drag-handle" onclick="closeActiveMobileSheet()"></div>
+      <div class="sheet-header">
+        <h3 id="mobile-sheet-title" class="font-outfit">Application</h3>
+        <button class="sheet-close-btn" onclick="closeActiveMobileSheet()"><i data-lucide="x"></i></button>
+      </div>
+      <div class="sheet-body custom-scrollbar" id="mobile-sheet-body">
+        <!-- Content dynamic loading -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== COMMAND PALETTE MODAL ==================== -->
+  <div id="command-palette-modal" class="command-palette-overlay hidden" onclick="toggleCommandPalette()">
+    <div class="command-palette glassmorphic font-inter" onclick="event.stopPropagation()">
+      <div class="palette-input-row">
+        <i data-lucide="search" class="palette-search-icon"></i>
+        <input type="text" id="palette-search-input" placeholder="Type a command or search app... (e.g. projects, emerald, terminal)" autocomplete="off">
+        <span class="palette-close-esc">ESC</span>
+      </div>
+      <div class="palette-results-list" id="palette-results">
+        <!-- Palette lists dynamically generated by script.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SYSTEM NOTIFICATIONS CONTAINER ==================== -->
+  <div class="notification-container" id="notification-container"></div>
+
+  <!-- ==================== VISITOR CUSTOM CLICK EFFECT TEMPLATE ==================== -->
+  <div id="click-effect-container"></div>
+
+  <!-- ==================== RAW DATA STRUCTURES FOR TERMINAL/AI AGENTS ==================== -->
+  <script id="resume-data-json" type="application/json">
+  {
+    "personalInfo": {
+      "fullName": "Prasoon Lawania",
+      "title": "AI Engineer & Full-Stack Developer",
+      "location": "Bharatpur, Rajasthan, India",
+      "education": {
+        "degree": "Bachelor of Technology (B.Tech)",
+        "major": "Computer Science & Engineering",
+        "institution": "Government Engineering College, Bharatpur",
+        "duration": "2024 - 2028",
+        "gpa": "8.78 / 10.0"
+      },
+      "bio": "I am a Computer Science undergraduate passionate about Artificial Intelligence, Machine Learning, and Full-Stack Development. I enjoy building products that combine elegant user experiences with scalable backend systems. My interests span intelligent automation, modern web technologies, and open-source software, with a focus on solving practical problems through technology."
+    },
+    "projects": [
+      {
+        "id": "praxa",
+        "title": "Praxa AI",
+        "category": "ai",
+        "tag": "AI / ML",
+        "tech": ["React", "Node.js", "Express", "MongoDB", "AI APIs"],
+        "description": "AI-powered assistant platform with authentication, real-time interactions, and modern UI. Serves as a unified assistant dashboard.",
+        "architecture": "Client (React) → Auth Gate → Backend (Node/Express) → Vector Stores / AI Model APIs → MongoDB"
+      },
+      {
+        "id": "raksha-ai",
+        "title": "Raksha AI (Agriculture)",
+        "category": "ai",
+        "tag": "AI / ML",
+        "tech": ["Python", "Scikit-learn", "NLTK", "Pandas", "TF-IDF", "Machine Learning", "NLP"],
+        "description": "AI-powered agriculture intelligence system using NLP and machine learning for farmer query analysis, intent classification, and advisory support.",
+        "architecture": "Farmer Queries → Text Preprocessing & TF-IDF → Multinomial Naive Bayes Classifiers → Cosine Similarity Advisory Retrieval",
+        "github": "https://github.com/Prasoonlawania/raksha-ai-agriculture-project"
+      },
+      {
+        "id": "invenkart",
+        "title": "InvenKart",
+        "category": "fullstack",
+        "tag": "Full-Stack",
+        "tech": ["React", "Node.js", "Express", "Python", "SQL"],
+        "description": "Hyperlocal inventory discovery platform connecting neighborhood consumers with local retailers in real-time.",
+        "architecture": "Frontend Web View → Node Backend Service → Geolocation Lookup API → SQL DB Server"
+      },
+      {
+        "id": "balsat",
+        "title": "BAL-SAT Hackathon Solution",
+        "category": "ai",
+        "tag": "AI / ML",
+        "tech": ["Python", "Pandas", "NumPy", "SQL", "Machine Learning"],
+        "description": "Data processing and analytics solution for Aadhaar enrollment workflows, resolving queue and workflow discrepancies.",
+        "architecture": "Enrollment Logs → Feature Parsing → Queue Load Forecasting Model → SQL Output Databoards"
+      },
+      {
+        "id": "portfolio",
+        "title": "Personal Portfolio OS",
+        "category": "fullstack",
+        "tag": "Full-Stack",
+        "tech": ["Next.js", "Tailwind CSS", "Framer Motion", "Vanilla JS"],
+        "description": "Interactive operating-system themed portfolio featuring glassmorphic designs, terminal command execution, and AI support.",
+        "architecture": "Modular Web Client Framework → CSS Aurora Filters → Terminal Parser → Local NLP Q&A Matching Engine"
+      },
+      {
+        "id": "ml-collection",
+        "title": "Machine Learning Projects",
+        "category": "ai",
+        "tag": "AI / ML",
+        "tech": ["PyTorch", "TensorFlow", "Scikit-learn", "OpenCV"],
+        "description": "A curated collection of predictive models, classification systems, and computer vision data analysis experiments.",
+        "architecture": "Data Pipelines → Training Scripts → Saved Checkpoints → Local Inference Server"
+      },
+      {
+        "id": "design-coll",
+        "title": "Graphic Design Portfolio",
+        "category": "others",
+        "tag": "Design & Others",
+        "tech": ["Figma", "Canva", "Generative AI Artwork"],
+        "description": "Professional posters, logo concepts, branding assets, banners, and AI-assisted digital art creations.",
+        "architecture": "Vector Outlines → Color Layout Sheets → Midjourney/DallE Prompts → Fine-tuned Visual Deliverables"
+      }
+    ],
+    "timeline": [
+      {"year": "2024", "event": "Started B.Tech CSE at Government Engineering College, Bharatpur"},
+      {"year": "2024", "event": "Mastered C++ structures and basic Object-Oriented programming"},
+      {"year": "2024", "event": "Started Web Development fundamentals (HTML5, CSS3, ES6 JavaScript)"},
+      {"year": "2025", "event": "Built First React Project and learned states, components, and hooks"},
+      {"year": "2025", "event": "Began AI Development: Scikit-learn, TensorFlow, neural networks"},
+      {"year": "2025", "event": "Developed Praxa AI assistant platform"},
+      {"year": "2025", "event": "Designed InvenKart hyperlocal search system"},
+      {"year": "2026", "event": "Present: Deepening study of Agentic AI, building advanced custom tools"}
+    ]
+  }
+  </script>
+
+  <!-- JS Scripts -->
+  <script src="js/script.js"></script>
+  <script src="js/ai.js"></script>
+
+</body>
+</html>
